@@ -6,5 +6,6 @@
 PROJECT_NAME := gatt_server_demos
 
 COMPONENT_ADD_INCLUDEDIRS := components/include
+COMPONENT_SRCDIRS := main main/gatts_services
 
 include $(IDF_PATH)/make/project.mk

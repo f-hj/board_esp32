@@ -8,6 +8,8 @@ extern "C" {
 
 float current_duty_cycle = 40;
 
+bool degraded = false;
+
 bool lights = true;
 bool bt_anim_on = false;
 bool back_anim_on = false;
@@ -96,17 +98,36 @@ void switch_lights(bool l) {
   lights_check(current_duty_cycle);
 }
 
+void real_move_forward(float duty_cycle) {
+  if (!degraded) {
+    brushed_motor_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, duty_cycle);
+    return;
+  }
+
+  // TODO: uart command
+  // (duty_cycle - 40) / 40
+}
+
+void real_move_stop() {
+  if (!degraded) {
+    brushed_motor_stop(MCPWM_UNIT_0, MCPWM_TIMER_0);
+    return;
+  }
+
+  // TODO: uart stop
+}
+
 // moving or breaking
 void move_forward(float duty_cycle) {
   current_duty_cycle = duty_cycle;
 
   lights_check(duty_cycle);
-  brushed_motor_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, duty_cycle);
+  real_move_forward(duty_cycle);
 }
 
 // stoping everything (free wheel)
 void move_stop() {
-  brushed_motor_stop(MCPWM_UNIT_0, MCPWM_TIMER_0);
+  real_move_stop();
   set_front_color(0, 0, 0);
 
   bt_anim_on = true;
@@ -115,6 +136,13 @@ void move_stop() {
 
 int lights_state() {
   return lights ? 1 : 0;
+}
+
+void switch_mode(bool is_degraded) {
+  degraded = is_degraded;
+
+  brushed_motor_stop(MCPWM_UNIT_0, MCPWM_TIMER_0);
+  // TODO: uart stop
 }
 
 

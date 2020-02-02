@@ -1,13 +1,13 @@
 #include "pwm.h"
 
-#define GPIO_PWM0A_OUT 15   //Set GPIO 15 as PWM0A
+#define GPIO_PWM0A_OUT 22   //Set GPIO 22 as PWM0A
 
 bool was_stopped = true;
 
 /**
  * @brief motor moves in forward direction, with duty cycle = duty %
  */
-void brushed_motor_forward(mcpwm_unit_t mcpwm_num, mcpwm_timer_t timer_num , float duty_cycle)
+void brushed_motor_forward(mcpwm_unit_t mcpwm_num, mcpwm_timer_t timer_num, float duty_cycle)
 {
     mcpwm_set_duty(mcpwm_num, timer_num, MCPWM_OPR_A, duty_cycle);
     if (was_stopped) {

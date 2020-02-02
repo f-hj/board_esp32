@@ -16,6 +16,8 @@
 #include "time.h"
 #include "sys/time.h"
 
+#include "spp.h"
+
 #define SPP_TAG "SPP_ACCEPTOR_DEMO"
 #define SPP_SERVER_NAME "SPP_SERVER"
 #define EXCAMPLE_DEVICE_NAME "FBoardD_SPP"
@@ -35,7 +37,9 @@ typedef enum {
     READING_DATA,
 } bt_action_t;
 
-char spp_buffer[255];
+bt_action_t state = NOTHING;
+char action;
+char data[8];
 
 static void print_speed(void)
 {
@@ -66,7 +70,7 @@ static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
         break;
     case ESP_SPP_CLOSE_EVT:
         ESP_LOGI(SPP_TAG, "ESP_SPP_CLOSE_EVT");
-        // TODO: Stop
+        move_stop();
         break;
     case ESP_SPP_START_EVT:
         ESP_LOGI(SPP_TAG, "ESP_SPP_START_EVT");
@@ -83,8 +87,10 @@ static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
 
         gettimeofday(&time_new, NULL);
         data_num += param->data_ind.len;
-        if (time_new.tv_sec - time_old.tv_sec >= 3) {
-            print_speed();
+
+        // WIP
+        if (param->data_ind.len == 1) {
+            move_forward(*param->data_ind.data);
         }
         break;
     case ESP_SPP_CONG_EVT:
@@ -95,7 +101,7 @@ static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
         break;
     case ESP_SPP_SRV_OPEN_EVT:
         ESP_LOGI(SPP_TAG, "ESP_SPP_SRV_OPEN_EVT");
-        // TODO: Set to 40
+        move_forward(40);
         gettimeofday(&time_old, NULL);
         break;
     default:

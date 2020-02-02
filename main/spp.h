@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "move.h"
 
 void init_spp();
 

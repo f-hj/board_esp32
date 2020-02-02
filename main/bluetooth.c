@@ -52,13 +52,13 @@ void init_bt()
         return;
     }
 
-    init_spp();
+    //init_spp();
     init_gatts();
 
-    esp_a2d_sink_init();
+    // esp_a2d_sink_init();
 
     /* initialize AVRCP controller */
-    esp_avrc_ct_init();
+    // esp_avrc_ct_init();
 
     return;
 }

@@ -6,9 +6,6 @@ extern "C" {
 #endif
 
 
-#include "buzzer.h"
-#include "move.h"
-
 void init_gatts();
 
 

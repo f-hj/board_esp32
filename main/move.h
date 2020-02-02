@@ -17,6 +17,8 @@ extern "C" {
 void move_forward(float duty_cycle);
 void move_stop();
 
+void switch_mode(bool is_degraded);
+
 void switch_lights(bool l);
 int lights_state();
 

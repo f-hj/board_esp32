@@ -29,6 +29,7 @@ extern "C" void app_main() {
     init_led();
 
     init_uart();
+    xTaskCreate(start_uart, "uart_start", 4096, NULL, 5, NULL);
 
     init_pwm();
 
